@@ -12,7 +12,8 @@ function App() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:8000/api/data");
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      const res = await fetch(`${apiUrl}/data`);
       const json = await res.json();
       setData(json);
     } catch (err) {
@@ -23,7 +24,8 @@ function App() {
   const runMatch = async () => {
     setLoading(true);
     try {
-      await fetch("http://localhost:8000/api/match", { method: "POST" });
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      await fetch(`${apiUrl}/match`, { method: "POST" });
       await fetchData();
     } catch (err) {
       console.error(err);
@@ -34,7 +36,8 @@ function App() {
   const runForecast = async () => {
     setLoading(true);
     try {
-      await fetch("http://localhost:8000/api/forecast", { method: "POST" });
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+      await fetch(`${apiUrl}/forecast`, { method: "POST" });
       await fetchData();
     } catch (err) {
       console.error(err);
@@ -44,8 +47,9 @@ function App() {
 
   const submitReport = async () => {
     if (!reportText) return;
+    const streamlitUrl = import.meta.env.VITE_STREAMLIT_URL || "http://localhost:8501";
     // Redirect to Streamlit dashboard with the report text
-    window.open(`http://localhost:8501/?report=${encodeURIComponent(reportText)}`, '_blank');
+    window.open(`${streamlitUrl}/?report=${encodeURIComponent(reportText)}`, '_blank');
     setReportText("");
   };
 
@@ -207,7 +211,7 @@ function App() {
             </div>
         </div>
         <div style={{textAlign: 'center', marginTop: '40px'}}>
-            <a href="http://localhost:8501" className="btn btn-primary" style={{fontSize: '18px', padding: '15px 30px', textDecoration: 'none'}} target="_blank" rel="noopener noreferrer">Explore Live Dashboard</a>
+            <a href={import.meta.env.VITE_STREAMLIT_URL || "http://localhost:8501"} className="btn btn-primary" style={{fontSize: '18px', padding: '15px 30px', textDecoration: 'none'}} target="_blank" rel="noopener noreferrer">Explore Live Dashboard</a>
         </div>
       </section>
 
